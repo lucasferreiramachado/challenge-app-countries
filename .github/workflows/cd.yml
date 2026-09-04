@@ -26,7 +26,7 @@ jobs:
       - name: Restore
         run:         dotnet restore Countries/Countries.csproj
       - name: Pack
-        run: dotnet pack Countries/Countries.csproj --configuration Release --no-restore --output artifacts -p:TargetFrameworks=net10.0 -p:PackageVersion="1.0.${{ github.run_number }}"
+        run: dotnet pack Countries/Countries.csproj --configuration Release --no-restore --output artifacts -p:TargetFrameworks=net10.0 -p:PackageVersion="1.0.0"
       - name: Validate package
         run: test -n "$(find artifacts -maxdepth 1 -name '*.nupkg' -print -quit)"
       - name: Publish package
