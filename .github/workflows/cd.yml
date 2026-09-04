@@ -41,7 +41,7 @@ jobs:
           {
             echo "## ChallengeApp.Countries"
             echo "- Commit: \`${GITHUB_SHA}\`"
-            echo "- Version: \`1.0.${GITHUB_RUN_NUMBER}\`"
+            echo "- Version: \`1.0.0\`"
             echo "- Feed: GitHub Packages"
             echo "- Package: published"
           } >> "$GITHUB_STEP_SUMMARY"
