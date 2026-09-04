@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Countries.Presentation"
+             xmlns:ds="clr-namespace:DesignSystem;assembly=DesignSystem"
+             x:Class="Countries.Presentation.FindCountriesByRegionView"
+             x:DataType="vm:FindCountriesByRegionViewModel"
+             x:Name="RootPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="true"
+             BackgroundColor="White">
+    <Grid RowDefinitions="Auto, *">
+        <ds:DsNavBar Grid.Row="0"
+                     Title="Buscar de países via API"
+                     BackCommand="{Binding VoltarCommand}" />
+
+        <ScrollView Grid.Row="1" VerticalOptions="FillAndExpand">
+            <VerticalStackLayout Padding="24,24,24,0" Spacing="16">
+                <ds:DsButton Text="Países da América do Norte"
+                             Command="{Binding OpenNorthAmericaCommand}" />
+
+                <CollectionView ItemsSource="{Binding NorthAmericaSelectedCountries}"
+                                VerticalScrollBarVisibility="Never">
+                    <CollectionView.RemainingItemsThreshold>0</CollectionView.RemainingItemsThreshold>
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" SnapPointsType="None" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SelectedCountryMoment">
+                            <Border Padding="10" Margin="0,0,0,8" Stroke="#E0E0E0" StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="1">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                    <Image
+                                        Source="{Binding FlagUrl}"
+                                        WidthRequest="42"
+                                        HeightRequest="28"
+                                        Aspect="AspectFill" />
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding CountryName}"
+                                           VerticalOptions="Center"
+                                           TextColor="#1A1A1A" />
+
+                                    <Button Grid.Column="2"
+                                            Text="X"
+                                            FontSize="12"
+                                            Padding="2"
+                                            WidthRequest="30"
+                                            HeightRequest="30"
+                                            CornerRadius="16"
+                                            BackgroundColor="#D32F2F"
+                                            TextColor="White"
+                                            Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.RemoveCountryCommand}"
+                                            CommandParameter="{Binding .}" />
+
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <ds:DsButton Text="Países da América do Sul"
+                             Command="{Binding OpenSouthAmericaCommand}"
+                             BackgroundColor="#0038E5"
+                             TextColor="White"
+                             CornerRadius="14"
+                             HeightRequest="52" />
+
+                <CollectionView ItemsSource="{Binding SouthAmericaSelectedCountries}"
+                                VerticalScrollBarVisibility="Never">
+                    <CollectionView.RemainingItemsThreshold>0</CollectionView.RemainingItemsThreshold>
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" SnapPointsType="None" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SelectedCountryMoment">
+                            <Border Padding="10" Margin="0,0,0,8" Stroke="#E0E0E0" StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="1">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                    <Image
+                                        Source="{Binding FlagUrl}"
+                                        WidthRequest="42"
+                                        HeightRequest="28"
+                                        Aspect="AspectFill" />
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding CountryName}"
+                                           VerticalOptions="Center"
+                                           TextColor="#1A1A1A" />
+
+                                    <Button Grid.Column="2"
+                                            Text="X"
+                                            FontSize="12"
+                                            Padding="2"
+                                            WidthRequest="30"
+                                            HeightRequest="30"
+                                            CornerRadius="16"
+                                            BackgroundColor="#D32F2F"
+                                            TextColor="White"
+                                            Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.RemoveCountryCommand}"
+                                            CommandParameter="{Binding .}" />
+
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

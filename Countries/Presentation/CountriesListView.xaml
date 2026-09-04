@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Countries.Presentation"
+             x:Class="Countries.Presentation.CountriesListView"
+             x:DataType="vm:CountriesListViewModel"
+             xmlns:ds="clr-namespace:DesignSystem;assembly=DesignSystem"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="true"
+             BackgroundColor="White">
+
+    <!-- MUDANÇA: Grid raiz controla o espaço total da tela -->
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Linha 0: Navbar fixa no topo -->
+        <ds:DsNavBar Grid.Row="0"
+                     Title="Buscar de países via API"
+                     BackCommand="{Binding VoltarCommand}" />
+
+        <!-- Linha 1: Container para os estados (ocupa todo o resto da tela) -->
+        <Grid Grid.Row="1">
+
+            <!-- ESTADO 1: CARREGAMENTO (Preenche a tela e centraliza o conteúdo) -->
+            <Grid IsVisible="{Binding IsLoading}"
+                  VerticalOptions="Fill"
+                  HorizontalOptions="Fill"
+                  Padding="56,0">
+                <VerticalStackLayout VerticalOptions="Center"
+                                     Spacing="24">
+                    <ds:DsLabelBold Text="{Binding RegionTitle, StringFormat='Buscando países da {0}...'}"
+                                    HorizontalTextAlignment="Center" />
+                    <ActivityIndicator IsRunning="{Binding IsLoading}" Color="#0038E5" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- ESTADO 2: ERRO NA REQUEST -->
+            <Grid IsVisible="{Binding HasError}"
+                  VerticalOptions="Fill"
+                  HorizontalOptions="Fill"
+                  Padding="56,0">
+                <VerticalStackLayout VerticalOptions="Center"
+                                     Spacing="24">
+                    <ds:DsLabelBold Text="Ops! Ocorreu um erro." HorizontalOptions="Center" />
+                    <ds:DsLabelRegular Text="Erro ao carregar os países. Verifique sua conexão."
+                                       HorizontalTextAlignment="Center" />
+                    <ds:DsButton Text="Fechar" Command="{Binding VoltarCommand}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- ESTADO 3: SUCESSO NA REQUEST -->
+            <!-- MUDANÇA: Usamos um Grid com IsVisible para gerenciar o layout do sucesso -->
+            <Grid IsVisible="{Binding IsSuccess}" RowDefinitions="*, Auto">
+
+                <!-- O ScrollView ocupa apenas a linha 0 (*), permitindo que a lista role livremente -->
+                <ScrollView Grid.Row="0">
+                    <VerticalStackLayout Margin="16,24,16,0" Spacing="16">
+                        <CollectionView ItemsSource="{Binding Countries}"
+                                        VerticalScrollBarVisibility="Never">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.EmptyView>
+                                <Label Text="{Binding EmptyMessage}"
+                                       TextColor="#555555"
+                                       Margin="0,12,0,0" />
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:CountryListItem">
+                                    <Border Padding="12" Margin="0,0,0,8" Stroke="#E0E0E0"
+                                            StrokeShape="RoundRectangle 12"
+                                            StrokeThickness="1">
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                            <Image Source="{Binding FlagUrl}"
+                                                   WidthRequest="42"
+                                                   HeightRequest="28"
+                                                   Aspect="AspectFill" />
+
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding Name}"
+                                                   VerticalOptions="Center"
+                                                   TextColor="#1A1A1A" />
+
+                                            <CheckBox Grid.Column="2"
+                                                      IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </ScrollView>
+
+                <!-- O Botão fica fixo na linha 1 (Auto), fora do ScrollView -->
+                <!-- Adicionamos uma cor de fundo ou padding para garantir que o conteúdo não passe por baixo de forma feia -->
+                <Grid Grid.Row="1" BackgroundColor="White" Padding="36,16,36,24">
+                    <ds:DsButton
+                        Text="Finalizar"
+                        Command="{Binding FinishSelectionCommand}" />
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+</ContentPage>
